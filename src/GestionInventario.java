@@ -1,21 +1,29 @@
+// Clase responsable de gestionar un inventario simple usando ArrayList.
+// Permite mostrar, buscar, añadir, eliminar y modificar productos, además de
+// algunas operaciones agregadas (total, productos caros, producto más caro).
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class GestionInventario {
 
-    private static ArrayList<Producto> inventario = new ArrayList<>();
-    private static Scanner sc = new Scanner(System.in);
+    // Lista que almacena los productos del inventario.
+    private static final ArrayList<Producto> inventario = new ArrayList<>();
+    // Scanner compartido para leer entradas desde la consola.
+    private static final Scanner sc = new Scanner(System.in);
 
+    // Punto de entrada del programa. Muestra un menú y permite al usuario
+    // ejecutar las operaciones disponibles hasta que elija salir.
     public static void main(String[] args) {
-        // Inicializar inventario base
+        // Inicializar inventario con algunos productos de ejemplo.
         inicializarInventario();
 
         int opcion;
         do {
             mostrarMenu();
+            // Leer la opción elegida por el usuario (con manejo de errores).
             opcion = leerEntero("Seleccione una opción: ");
 
+            // Selección de la operación mediante switch.
             switch (opcion) {
                 case 1 -> mostrarInventario();
                 case 2 -> buscarProductoPorCodigo();
@@ -30,7 +38,7 @@ public class GestionInventario {
         } while (opcion != 8);
     }
 
-    // Menú principal
+    // Menú principal que muestra las opciones disponibles al usuario.
     private static void mostrarMenu() {
         System.out.println("\n--- MENÚ DE INVENTARIO ---");
         System.out.println("1. Mostrar inventario");
@@ -43,7 +51,7 @@ public class GestionInventario {
         System.out.println("8. Salir");
     }
 
-    // Inicializar inventario con productos base
+    // Inicializar inventario con productos base de ejemplo.
     private static void inicializarInventario() {
         inventario.add(new Producto("P001", "Portátil", 899.99));
         inventario.add(new Producto("P002", "Ratón", 25.50));
@@ -52,27 +60,29 @@ public class GestionInventario {
         inventario.add(new Producto("P005", "Webcam", 59.90));
     }
 
-    // Mostrar todos los productos
+    // Mostrar todos los productos del inventario por pantalla.
     private static void mostrarInventario() {
         System.out.println("\n--- INVENTARIO ---");
         if (inventario.isEmpty()) {
             System.out.println("El inventario está vacío.");
         } else {
+            // El método toString() de Producto es usado para la representación.
             for (Producto p : inventario) {
                 System.out.println(p);
             }
         }
     }
 
-    // Buscar producto por código
+    // Buscar producto por código (búsqueda no sensible a mayúsculas/minúsculas).
     private static void buscarProductoPorCodigo() {
         System.out.print("Ingrese el código del producto a buscar: ");
         String codigo = sc.nextLine();
         Producto encontrado = null;
         for (Producto p : inventario) {
+            // equalsIgnoreCase permite que "P001" y "p001" se consideren iguales.
             if (p.getCodigo().equalsIgnoreCase(codigo)) {
                 encontrado = p;
-                break;
+                break; // Se asume código único, se rompe tras encontrarlo.
             }
         }
         if (encontrado != null) {
@@ -82,7 +92,7 @@ public class GestionInventario {
         }
     }
 
-    // Buscar producto por nombre
+    // Buscar productos por nombre y mostrar todos los que coincidan (no solo el primero).
     private static void buscarProductoPorNombre() {
         System.out.print("Ingrese el nombre del producto a buscar: ");
         String nombre = sc.nextLine();
@@ -98,36 +108,39 @@ public class GestionInventario {
         }
     }
 
-    // Añadir nuevo producto
+    // Añadir un nuevo producto tras verificar que el código no exista ya.
     private static void agregarProducto() {
         System.out.print("Ingrese código del nuevo producto: ");
         String codigo = sc.nextLine();
 
-        // Verificar que el código no exista
+        // Verificar que el código no exista (evitar duplicados).
         for (Producto p : inventario) {
             if (p.getCodigo().equalsIgnoreCase(codigo)) {
                 System.out.println("Error: Ya existe un producto con ese código.");
-                return;
+                return; // Salir del método sin añadir.
             }
         }
 
         System.out.print("Ingrese nombre del producto: ");
         String nombre = sc.nextLine();
 
+        // Leer precio con control de formato (evita NumberFormatException visible al usuario).
         double precio = leerDouble("Ingrese precio del producto: ");
         if(precio < 0){
             System.out.println("Error: El precio no puede ser negativo.");
             return;
         }
 
+        // Añadir el nuevo Producto a la lista.
         inventario.add(new Producto(codigo, nombre, precio));
         System.out.println("Producto añadido correctamente.");
     }
 
-    // Eliminar producto
+    // Eliminar producto por código; usa removeIf para eliminar todas las coincidencias.
     private static void eliminarProducto() {
         System.out.print("Ingrese el código del producto a eliminar: ");
         String codigo = sc.nextLine();
+        // removeIf devuelve true si al menos un elemento fue eliminado.
         boolean eliminado = inventario.removeIf(p -> p.getCodigo().equalsIgnoreCase(codigo));
         if (eliminado) {
             System.out.println("Producto eliminado correctamente.");
@@ -136,7 +149,7 @@ public class GestionInventario {
         }
     }
 
-    // Modificar precio de un producto
+    // Modificar el precio de un producto buscando por código.
     private static void modificarPrecioProducto() {
         System.out.print("Ingrese el código del producto a modificar: ");
         String codigo = sc.nextLine();
@@ -153,6 +166,7 @@ public class GestionInventario {
                 System.out.println("Error: El precio no puede ser negativo.");
                 return;
             }
+            // Actualiza el precio usando el setter de Producto.
             encontrado.setPrecio(nuevoPrecio);
             System.out.println("Precio actualizado correctamente.");
         } else {
@@ -160,7 +174,8 @@ public class GestionInventario {
         }
     }
 
-    // Operaciones avanzadas
+    // Operaciones avanzadas: calcula el total, muestra productos con precio > 50€
+    // y determina el producto más caro del inventario.
     private static void operacionesAvanzadas() {
         if (inventario.isEmpty()) {
             System.out.println("El inventario está vacío.");
@@ -168,12 +183,13 @@ public class GestionInventario {
         }
 
         double total = 0;
+        // Se inicializa masCaro con el primer elemento para poder compararlo.
         Producto masCaro = inventario.get(0);
         System.out.println("\nProductos con precio > 50€:");
         for (Producto p : inventario) {
             total += p.getPrecio();
             if (p.getPrecio() > masCaro.getPrecio()) {
-                masCaro = p;
+                masCaro = p; // Actualiza el producto más caro encontrado hasta ahora.
             }
             if (p.getPrecio() > 50) {
                 System.out.println(p);
@@ -183,7 +199,9 @@ public class GestionInventario {
         System.out.println("Producto más caro: " + masCaro);
     }
 
-    // Método para leer enteros con manejo de excepciones
+    // Método para leer enteros con manejo de excepciones. Lee una línea y la parsea
+    // como entero; si falla, repite la petición hasta que el usuario introduzca
+    // un valor válido.
     private static int leerEntero(String mensaje) {
         while (true) {
             System.out.print(mensaje);
@@ -195,7 +213,7 @@ public class GestionInventario {
         }
     }
 
-    // Método para leer doubles con manejo de excepciones
+    // Método para leer doubles (decimales) con manejo de excepciones similar.
     private static double leerDouble(String mensaje) {
         while (true) {
             System.out.print(mensaje);
@@ -207,4 +225,3 @@ public class GestionInventario {
         }
     }
 }
-
