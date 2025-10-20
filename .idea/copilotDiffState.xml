@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/Producto.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/Producto.java" />
+              <option name="originalContent" value="public class Producto {&#10;    private String codigo;&#10;    private String nombre;&#10;    private double precio;&#10;&#10;    // Constructor&#10;    public Producto(String codigo, String nombre, double precio) {&#10;        this.codigo = codigo;&#10;        this.nombre = nombre;&#10;        this.precio = precio;&#10;    }&#10;&#10;    // Getters&#10;    public String getCodigo() { return codigo; }&#10;    public String getNombre() { return nombre; }&#10;    public double getPrecio() { return precio; }&#10;&#10;    // Setter para precio&#10;    public void setPrecio(double precio) { this.precio = precio; }&#10;&#10;    @Override&#10;    public String toString() {&#10;        return codigo + &quot; - &quot; + nombre + &quot; (&quot; + precio + &quot;€)&quot;;&#10;    }&#10;}&#10;&#10;" />
+              <option name="updatedContent" value="// Clase que representa un producto del inventario.&#10;// Contiene un código identificador, un nombre y un precio.&#10;public class Producto {&#10;    // Código único del producto (ej. &quot;P001&quot;).&#10;    private final String codigo;&#10;    // Nombre descriptivo del producto (ej. &quot;Portátil&quot;).&#10;    private final String nombre;&#10;    // Precio en euros. Puede ser un número con decimales.&#10;    private double precio;&#10;&#10;    // Constructor&#10;    // Parámetros:&#10;    //  - codigo: identificador único del producto&#10;    //  - nombre: nombre descriptivo&#10;    //  - precio: precio en euros (double)&#10;    public Producto(String codigo, String nombre, double precio) {&#10;        this.codigo = codigo;&#10;        this.nombre = nombre;&#10;        this.precio = precio;&#10;    }&#10;&#10;    // Getters: permiten obtener los valores de los campos.&#10;    public String getCodigo() { return codigo; }&#10;    public String getNombre() { return nombre; }&#10;    public double getPrecio() { return precio; }&#10;&#10;    // Setter para precio: permite actualizar únicamente el precio del producto.&#10;    public void setPrecio(double precio) { this.precio = precio; }&#10;&#10;    // toString() sobrescrito para mostrar una representación legible del producto.&#10;    // Ejemplo de salida: &quot;P001 - Portátil (899.99€)&quot;&#10;    @Override&#10;    public String toString() {&#10;        return codigo + &quot; - &quot; + nombre + &quot; (&quot; + precio + &quot;€)&quot;;&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
